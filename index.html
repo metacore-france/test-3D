@@ -3,10 +3,280 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PC Futuriste Immersif</title>
-<link rel="stylesheet" href="style.css">
+<title>Site Vitrine Centré</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: white;
+  min-height: 200vh;
+  background: #000;
+  display: flex;
+  justify-content: center;
+  overflow-x: hidden;
+}
+
+/* Vidéo de fond */
+#bgVideo {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  z-index: -2;
+  filter: blur(8px) brightness(0.85);
+  transform: translateY(0px) scale(1.05);
+}
+
+/* Overlay dégradé vers le noir */
+.background-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(0,0,0,0) 70%, rgba(0,0,0,0.7) 100%);
+}
+
+/* === Sidebar gauche === */
+.sidebar {
+  position: fixed;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 60px;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(6px);
+  border-radius: 0 12px 12px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 10px 0;
+  transition: width 0.3s ease;
+  z-index: 10;
+}
+
+.sidebar:hover { width: 200px; }
+
+.sidebar a {
+  color: white;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.sidebar a i { width: 40px; font-size: 1.5em; text-align: center; }
+
+.sidebar span {
+  opacity: 0;
+  white-space: nowrap;
+  transition: opacity 0.3s ease;
+  margin-left: 10px;
+}
+
+.sidebar:hover span { opacity: 1; }
+
+/* === Conteneur central === */
+.container {
+  max-width: 1000px;
+  width: 100%;
+  padding-left: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* === Header === */
+header {
+  text-align: center;
+  margin-top: 80px;
+}
+
+h1 { font-size: 3em; text-shadow: 0 2px 6px rgba(0,0,0,0.5); }
+
+.btn {
+  margin-top: 20px;
+  padding: 12px 24px;
+  font-size: 1.2em;
+  border: none;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.2);
+  color: white;
+  backdrop-filter: blur(6px);
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn:hover { background: rgba(255,255,255,0.4); }
+
+/* === Section Services === */
+.cards {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 80px auto;
+  flex-wrap: wrap;
+}
+
+.card {
+  flex: 1;
+  min-width: 250px;
+  max-width: 300px;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.card:hover { transform: translateY(-10px); background: rgba(255,255,255,0.2); }
+
+.card h2 { font-size: 1.5em; margin-bottom: 10px; }
+.card p { font-size: 1em; line-height: 1.4; }
+
+/* === Section Dons === */
+.don-section {
+  margin: 80px auto;
+  padding: 40px 20px;
+  max-width: 800px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 16px;
+  backdrop-filter: blur(8px);
+  text-align: center;
+}
+
+.don-section h2 { font-size: 2em; margin-bottom: 20px; }
+
+.don-btn {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 12px 24px;
+  font-size: 1.2em;
+  border: none;
+  border-radius: 12px;
+  background: #ffcc00;
+  color: black;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  text-decoration: none;
+}
+
+.don-btn:hover { transform: scale(1.05); }
+
+/* Réseaux sociaux */
+.socials {
+  margin: 60px 0 20px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.socials a {
+  color: white;
+  font-size: 2em;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.socials a:hover { color: #ffcc00; transform: scale(1.2); }
+
+/* Footer */
+footer {
+  margin-top: 40px;
+  padding: 20px;
+  font-size: 0.9em;
+  color: rgba(255,255,255,0.6);
+}
+
+/* Mobile */
+@media(max-width:768px) {
+  .container { padding-left: 20px; }
+}
+</style>
 </head>
 <body>
-<script type="module" src="main.js"></script>
+
+<video autoplay muted loop playsinline preload="metadata" id="bgVideo" poster="bg-poster.jpg">
+  <source src="bg.webm" type="video/webm">
+  Votre navigateur ne supporte pas la vidéo HTML5.
+</video>
+<div class="background-overlay"></div>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <a href="#home"><i class="fa-solid fa-house"></i> <span>Accueil</span></a>
+  <a href="#services"><i class="fa-solid fa-computer"></i> <span>Services</span></a>
+  <a href="#don"><i class="fa-solid fa-hand-holding-dollar"></i> <span>Soutenir</span></a>
+  <a href="#contact"><i class="fa-solid fa-envelope"></i> <span>Contact</span></a>
+</div>
+
+<!-- Contenu centré -->
+<div class="container">
+  <header id="home">
+    <h1>Bienvenue sur mon site</h1>
+    <button class="btn">Réserver</button>
+  </header>
+
+  <section class="cards" id="services">
+    <div class="card">
+      <h2>Optimisation PC</h2>
+      <p>Boostez la rapidité de votre ordinateur grâce à mes services d’optimisation professionnelle.</p>
+    </div>
+    <div class="card">
+      <h2>Réparations</h2>
+      <p>Dépannage matériel et logiciel rapide et fiable, à domicile ou à distance.</p>
+    </div>
+    <div class="card">
+      <h2>Conseils & Formations</h2>
+      <p>Accompagnement personnalisé pour mieux utiliser vos outils informatiques.</p>
+    </div>
+  </section>
+
+  <section class="don-section" id="don">
+    <h2>Soutenir mon travail 💖</h2>
+    <p>Si vous souhaitez m’encourager et soutenir mes projets, vous pouvez faire un don en toute simplicité :</p>
+    <a href="https://www.paypal.com/donate" target="_blank" class="don-btn">
+      <i class="fa-brands fa-paypal"></i> Faire un don
+    </a>
+  </section>
+
+  <div class="socials" id="contact">
+    <a href="#"><i class="fa-brands fa-facebook"></i></a>
+    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+    <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+    <a href="#"><i class="fa-brands fa-github"></i></a>
+  </div>
+
+  <footer>
+    &copy; 2025 Mon Site Vitrine - Tous droits réservés
+  </footer>
+</div>
+
+<script>
+let targetScroll = 0;
+let currentScroll = 0;
+let zoomLevel = 1.05;
+const bgVideo = document.getElementById('bgVideo');
+
+function animate() {
+  currentScroll += (targetScroll - currentScroll) * 0.1;
+  zoomLevel += 0.0002;
+  if (zoomLevel > 1.12) zoomLevel = 1.05;
+  bgVideo.style.transform = `translateY(${currentScroll * 0.2}px) scale(${zoomLevel})`;
+  requestAnimationFrame(animate);
+}
+
+window.addEventListener('scroll', () => { targetScroll = window.scrollY; });
+animate();
+
+// Optimisation mobile
+if (window.innerWidth < 768) {
+  bgVideo.parentNode.removeChild(bgVideo);
+  document.body.style.background = "url('bg-poster.jpg') no-repeat center center fixed #000";
+  document.body.style.backgroundSize = "cover";
+}
+</script>
 </body>
 </html>
