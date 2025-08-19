@@ -1,0 +1,8 @@
+body {
+  margin: 0;
+  overflow: hidden;
+  background: #000; /* fond noir futuriste */
+}
+canvas {
+  display: block;
+}
