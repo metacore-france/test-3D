@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MetaCore 3D</title>
 <style>
-body { margin:0; overflow:hidden; background:#111; }
+body { margin:0; overflow:hidden; background:#111; font-family:sans-serif;}
 canvas { display:block; }
 .header-buttons {
   position:absolute; top:20px; right:20px; display:flex; gap:10px; z-index:10;
@@ -28,10 +28,11 @@ canvas { display:block; }
 <canvas id="canvas3d"></canvas>
 
 <script type="module">
+// Import ES modules depuis CDN
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.module.js';
 import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.155.0/examples/jsm/controls/OrbitControls.js';
 
-// Scene & camera
+// Scene et caméra
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x111111);
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
@@ -52,7 +53,7 @@ scene.add(pl);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 
-// Background particules
+// Particules de fond
 const particlesGeo = new THREE.BufferGeometry();
 const particlesCount = 5000;
 const posArray = new Float32Array(particlesCount*3);
@@ -62,7 +63,7 @@ const particlesMat = new THREE.PointsMaterial({color:0x00ffff, size:0.1});
 const particles = new THREE.Points(particlesGeo, particlesMat);
 scene.add(particles);
 
-// Cartes 3D interactives
+// Cartes 3D
 const cardGeo = new THREE.BoxGeometry(4,2,0.5);
 const cards = [];
 const cardData = [
@@ -71,7 +72,9 @@ const cardData = [
   {color:0x4d4dff, url:"installation-os.html"}
 ];
 cardData.forEach((c,i)=>{
-  const mat = new THREE.MeshStandardMaterial({color:c.color, metalness:0.7, roughness:0.2, emissive:c.color, emissiveIntensity:0.3});
+  const mat = new THREE.MeshStandardMaterial({
+    color:c.color, metalness:0.7, roughness:0.2, emissive:c.color, emissiveIntensity:0.3
+  });
   const card = new THREE.Mesh(cardGeo, mat);
   card.position.set((i-1)*6,0,0);
   card.userData = {url:c.url};
@@ -81,7 +84,9 @@ cardData.forEach((c,i)=>{
 
 // Logo 3D triangle
 const logoGeo = new THREE.ConeGeometry(1.2,1.2,3);
-const logoMat = new THREE.MeshStandardMaterial({color:0xff00ff, metalness:0.7, roughness:0.2, emissive:0xff00ff, emissiveIntensity:0.5});
+const logoMat = new THREE.MeshStandardMaterial({
+  color:0xff00ff, metalness:0.7, roughness:0.2, emissive:0xff00ff, emissiveIntensity:0.5
+});
 const logo = new THREE.Mesh(logoGeo, logoMat);
 logo.position.set(0,4,0);
 scene.add(logo);
@@ -89,7 +94,7 @@ scene.add(logo);
 // Clic sur cartes
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
-window.addEventListener('click', e => {
+window.addEventListener('click', e=>{
   mouse.x = (e.clientX/window.innerWidth)*2-1;
   mouse.y = -(e.clientY/window.innerHeight)*2+1;
   raycaster.setFromCamera(mouse,camera);
@@ -97,7 +102,7 @@ window.addEventListener('click', e => {
   if(intersects.length>0) window.location.href = intersects[0].object.userData.url;
 });
 
-// Animate
+// Animation
 function animate(){
   requestAnimationFrame(animate);
   controls.update();
